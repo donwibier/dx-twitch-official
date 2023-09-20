@@ -5,6 +5,6 @@ Sample code produced in the DevExpress Official Twitch Show at [https://twitch.t
 
 ## Episode 1:
 You will learn how to implement a Theme toggler to switch between the Blazing Berry and Blazing Berry Dark theme. 
-Also take a look in the [DxThemeToggler.razor](https://github.com/donwibier/dx-twitch-official/blob/main/DxBlazor.UI/DxThemeToggler.razor) and [dxblazor-ui.js](https://github.com/donwibier/dx-twitch-official/blob/main/wwwroot/dxblazor-ui.js) how to align the default theme with the operating system settings and how to change themes on changes in the OS settings (dark/light). Rewatch at [DevExpressOfficial](https://www.twitch.tv/videos/1929711861)
+Also take a look in the [DxThemeToggler.razor](https://github.com/donwibier/dx-twitch-official/blob/main/DxBlazor.UI/DxThemeToggler.razor) and [dxblazor-ui.js](https://github.com/donwibier/dx-twitch-official/blob/main/DxBlazor.UI/wwwroot/dxblazor-ui.js) how to align the default theme with the operating system settings and how to change themes on changes in the OS settings (dark/light). Rewatch at [DevExpressOfficial](https://www.twitch.tv/videos/1929711861)
 
 
