@@ -1,0 +1,86 @@
+﻿@implements IAsyncDisposable
+
+@using Microsoft.JSInterop
+
+<HeadContent>
+    @foreach (var item in _activeTheme.StylesheetLinkUrl)
+    {
+        <link href="@item" rel="stylesheet" />
+    }
+</HeadContent>
+
+<DxCheckBox CheckType="CheckType.Switch"
+            LabelPosition="LabelPosition.Left" Alignment="CheckBoxContentAlignment.SpaceBetween"
+            @bind-Checked="@DarkMode">
+    Dark mode
+</DxCheckBox>
+
+@code {
+    public record ThemeItem(string Name, string[] StylesheetLinkUrl)
+    {
+        public static ThemeItem Create(string name)
+            => new ThemeItem(name, new[] { $"_content/DevExpress.Blazor.Themes/{name}.bs5.min.css" });
+    };
+
+    private readonly static ThemeItem lightTheme = ThemeItem.Create("blazing-berry");
+    private readonly static ThemeItem darkTheme = ThemeItem.Create("blazing-dark");
+
+    private ThemeItem _activeTheme = lightTheme;
+    private readonly Lazy<Task<IJSObjectReference>> moduleTask;
+
+    [Inject] IJSRuntime jsRuntime { get; set; } = default!;
+
+    public DxThemeToggler()
+    {
+        moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/DxBlazor.UI/dxblazor-ui.js").AsTask());
+    }
+
+    private bool _darkMode = false;
+    public bool DarkMode
+    {
+        get => _darkMode;
+        set
+        {
+            if (_darkMode != value)
+            {
+                _darkMode = value;
+                _activeTheme = _darkMode ? darkTheme : lightTheme;
+                InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            DarkMode = await IsDarkMode();
+            var module = await moduleTask.Value;
+            await module.InvokeVoidAsync("addThemeSwitchListener", DotNetObjectReference.Create(this));
+        }
+
+    }
+
+    public async ValueTask<bool> IsDarkMode()
+    {
+        var module = await moduleTask.Value;
+        return await module.InvokeAsync<bool>("isDarkMode");
+    }
+
+    [JSInvokable]
+    public void OsThemeSwitched(bool isDark)
+    {
+        DarkMode = isDark;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (moduleTask.IsValueCreated)
+        {
+            var module = await moduleTask.Value;
+            await module.DisposeAsync();
+        }
+    }
+}
