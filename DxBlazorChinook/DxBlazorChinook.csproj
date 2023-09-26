@@ -12,6 +12,6 @@
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DxBlazor.UI\DxBlazor.UI.csproj" />
+    <ProjectReference Include="..\DxBlazor.UI\DxBlazor.UI.csproj" />
   </ItemGroup>
 </Project>
