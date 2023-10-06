@@ -1,18 +1,7 @@
-﻿@page "/grid"
-@using FluentValidation;
+﻿@page "/customers"
 
-@inject IDataStore<int, CustomerModel> Store
-
-<DxGrid Data="@Data"
-        CustomizeEditModel="Grid_CustomizeEditModel"
-        EditModelSaving="Grid_EditModelSaving"
-        DataItemDeleting="Grid_DataItemDeleting"
-        EditMode="GridEditMode.PopupEditForm"
-        ValidationEnabled="true"
-        ShowSearchBox="true"
-        KeyFieldName="@Store.KeyField">
-    <Columns>
-        <DxGridCommandColumn Width="160px" />
+<BrowseAndEditCtrl TKey="int" TModel="CustomerModel">
+    <GridColumns>
         <DxGridDataColumn FieldName="@nameof(CustomerModel.FirstName)" Caption="LastName" />
         <DxGridDataColumn FieldName="@nameof(CustomerModel.LastName)" Caption="LastName" />
         <DxGridDataColumn FieldName="@nameof(CustomerModel.Company)" Caption="Company" />
@@ -24,100 +13,26 @@
         <DxGridDataColumn FieldName="@nameof(CustomerModel.Phone)" Caption="Phone" />
         <DxGridDataColumn FieldName="@nameof(CustomerModel.Fax)" Caption="Fax" />
         <DxGridDataColumn FieldName="@nameof(CustomerModel.Email)" Caption="Email" />
-    </Columns>
-    <EditFormTemplate Context="EditFormContext">
-        <DxFormLayout CssClass="w-100">
-            @{
-                var item = (CustomerModel)EditFormContext.EditModel;
-            }
-            <DxFormLayoutItem Caption="FirstName" ColSpanMd="6"><DxTextBox @bind-Text="item.FirstName" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="LastName" ColSpanMd="6"><DxTextBox @bind-Text="item.LastName" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Company" ColSpanMd="6"><DxTextBox @bind-Text="item.Company" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Address" ColSpanMd="6"><DxTextBox @bind-Text="item.Address" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="City" ColSpanMd="6"><DxTextBox @bind-Text="item.City" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="State" ColSpanMd="6"><DxTextBox @bind-Text="item.State" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Country" ColSpanMd="6"><DxTextBox @bind-Text="item.Country" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="PostalCode" ColSpanMd="6"><DxTextBox @bind-Text="item.PostalCode" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Phone" ColSpanMd="6"><DxTextBox @bind-Text="item.Phone" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Fax" ColSpanMd="6"><DxTextBox @bind-Text="item.Fax" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Email" ColSpanMd="6"><DxTextBox @bind-Text="item.Email" /></DxFormLayoutItem>
-            <DxFormLayoutItem Caption="" ColSpanSm="12" BeginRow="true"
-                              CssClass="formlayout-validation-summary">
-                <Template>
-                    <div class="validation-container" style="color:red;">
-                        <ValidationSummary @ref="validationSummary"></ValidationSummary>
-                            <ul class="validation-errors">
-                        @if (serverError != null)
-                        {
-                                @foreach (var e in serverError.Errors)
-                                {
-                                    <li>@e.ErrorMessage</li>
-                                }
-                            }
-                        </ul>
-                    </div>
-                </Template>
-            </DxFormLayoutItem>
-        </DxFormLayout>
-    </EditFormTemplate>
-    <CustomValidators>
-        <FluentValidationValidator @ref="fluentValidator"></FluentValidationValidator>
-    </CustomValidators>
-
-</DxGrid>
-
-@code {
-    private FluentValidationValidator? fluentValidator;
-    private ValidationSummary? validationSummary;
-
-    object Data { get; set; } = default!;
-
-    protected override void OnInitialized()
-    {
-        var dataSource = new GridDevExtremeDataSource<CustomerModel>(Store.Query());
-        dataSource.CustomizeLoadOptions = (loadOptions) =>
-        {
-            // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
-            // This can make SQL execution plans more efficient.
-            loadOptions.PrimaryKey = new[] { Store.KeyField };
-            loadOptions.PaginateViaPrimaryKey = true;
-        };
-        Data = dataSource;        
-    }
-
-    void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
-    {
-        if (e.IsNew)
-        {
-            var item = (CustomerModel)e.EditModel;
-            item.FirstName = "John";
-            item.LastName = "Doe";
+    </GridColumns>
+    <EditFormLayoutItems Context="ctx">
+        @{
+            var item = (CustomerModel)ctx.EditModel;
         }
-    }
-    ValidationException? serverError = default!;
-    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {       
-        serverError = default!;
-        var item = (CustomerModel)e.EditModel;
-        var result = (e.IsNew)
-            ? await Store.CreateAsync(item)
-            : await Store.UpdateAsync(item);
-        if (!result.Success)
-        {
-            e.Cancel = true;
-            serverError = result.Exception as ValidationException;
-        }
-    }
+        <DxFormLayoutItem Caption="FirstName" ColSpanMd="6"><DxTextBox @bind-Text="item.FirstName" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="LastName" ColSpanMd="6"><DxTextBox @bind-Text="item.LastName" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Company" ColSpanMd="6"><DxTextBox @bind-Text="item.Company" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Address" ColSpanMd="6"><DxTextBox @bind-Text="item.Address" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="City" ColSpanMd="6"><DxTextBox @bind-Text="item.City" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="State" ColSpanMd="6"><DxTextBox @bind-Text="item.State" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Country" ColSpanMd="6"><DxTextBox @bind-Text="item.Country" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="PostalCode" ColSpanMd="6"><DxTextBox @bind-Text="item.PostalCode" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Phone" ColSpanMd="6"><DxTextBox @bind-Text="item.Phone" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Fax" ColSpanMd="6"><DxTextBox @bind-Text="item.Fax" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Email" ColSpanMd="6"><DxTextBox @bind-Text="item.Email" /></DxFormLayoutItem>
 
-    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
-    {
-        serverError = null;
-        var item = (CustomerModel)e.DataItem;
-        var result = await Store.DeleteAsync(Store.ModelKey(item));
-        if (!result.Success)
-        {
-            e.Cancel = true;
-            serverError = result.Exception as ValidationException;
-        }
-    }
+    </EditFormLayoutItems>
+</BrowseAndEditCtrl>
+
+@code{
+
 }
