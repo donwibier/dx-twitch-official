@@ -14,5 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DxBlazor.UI\DxBlazor.UI.csproj" />
     <ProjectReference Include="..\DxChinook.Data.EF\DxChinook.Data.EF.csproj" />
+    <ProjectReference Include="..\DxChinook.Data\DxChinook.Data.csproj" />
   </ItemGroup>
 </Project>
