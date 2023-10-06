@@ -13,8 +13,9 @@ namespace DxChinook.Data
     {
         public static IServiceCollection RegisterModelValidators(this IServiceCollection services)
         {            
-            services.AddScoped<IValidator<CustomerModel>, CustomerModelValidator>();            
-            
+            services.AddScoped<IValidator<CustomerModel>, CustomerModelValidator>();
+            services.AddScoped<IValidator<ArtistModel>, ArtistModelValidator>();
+
             return services;
         }
     }
