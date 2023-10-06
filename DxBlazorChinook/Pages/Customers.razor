@@ -1,0 +1,146 @@
+﻿@page "/grid"
+
+@using DxChinook.Data.EF.Models
+@inject ChinookContext ctx
+
+<DxGrid Data="@Data"
+        CustomizeEditModel="Grid_CustomizeEditModel"
+        EditModelSaving="Grid_EditModelSaving"
+        DataItemDeleting="Grid_DataItemDeleting"
+        EditMode="GridEditMode.PopupEditForm"
+        ShowSearchBox="true"
+        KeyFieldName="@nameof(Customer.CustomerId)">
+    <Columns>
+        <DxGridCommandColumn Width="160px" />
+        <DxGridDataColumn FieldName="@nameof(Customer.FirstName)" Caption="LastName" />
+        <DxGridDataColumn FieldName="@nameof(Customer.LastName)" Caption="LastName" />
+        <DxGridDataColumn FieldName="@nameof(Customer.Company)" Caption="Company" />
+        <DxGridDataColumn FieldName="@nameof(Customer.Address)" Caption="Address" />
+        <DxGridDataColumn FieldName="@nameof(Customer.City)" Caption="City" />
+        <DxGridDataColumn FieldName="@nameof(Customer.State)" Caption="State" />
+        <DxGridDataColumn FieldName="@nameof(Customer.Country)" Caption="Country" />
+        <DxGridDataColumn FieldName="@nameof(Customer.PostalCode)" Caption="PostalCode" />
+        <DxGridDataColumn FieldName="@nameof(Customer.Phone)" Caption="Phone" />
+        <DxGridDataColumn FieldName="@nameof(Customer.Fax)" Caption="Fax" />
+        <DxGridDataColumn FieldName="@nameof(Customer.Email)" Caption="Email" />
+    </Columns>
+    <EditFormTemplate Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            @{
+                var item = (Customer)EditFormContext.EditModel;
+            }
+            <DxFormLayoutItem Caption="FirstName" ColSpanMd="6"><DxTextBox @bind-Text="item.FirstName" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="LastName" ColSpanMd="6"><DxTextBox @bind-Text="item.LastName" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Company" ColSpanMd="6"><DxTextBox @bind-Text="item.Company" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Address" ColSpanMd="6"><DxTextBox @bind-Text="item.Address" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="City" ColSpanMd="6"><DxTextBox @bind-Text="item.City" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="State" ColSpanMd="6"><DxTextBox @bind-Text="item.State" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Country" ColSpanMd="6"><DxTextBox @bind-Text="item.Country" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="PostalCode" ColSpanMd="6"><DxTextBox @bind-Text="item.PostalCode" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Phone" ColSpanMd="6"><DxTextBox @bind-Text="item.Phone" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Fax" ColSpanMd="6"><DxTextBox @bind-Text="item.Fax" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Email" ColSpanMd="6"><DxTextBox @bind-Text="item.Email" /></DxFormLayoutItem>
+            <DxFormLayoutItem Caption="" ColSpanSm="12" BeginRow="true"
+                              CssClass="formlayout-validation-summary"
+                              Visible="@(!string.IsNullOrEmpty(serverError))">
+                <Template>
+                    <div class="validation-errors" style="color:red;">
+                        @serverError
+                    </div>
+                </Template>
+            </DxFormLayoutItem>
+        </DxFormLayout>
+    </EditFormTemplate>
+</DxGrid>
+
+@code {
+    object Data { get; set; } = default!;
+
+    [Parameter] public bool PaginateViaPrimaryKey { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var dataSource = new GridDevExtremeDataSource<Customer>(ctx.Customers);
+        if (PaginateViaPrimaryKey)
+        {
+            dataSource.CustomizeLoadOptions = (loadOptions) =>
+            {
+                // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
+                // This can make SQL execution plans more efficient.
+                loadOptions.PrimaryKey = new[] { nameof(Customer.CustomerId) };
+                loadOptions.PaginateViaPrimaryKey = PaginateViaPrimaryKey;
+            };
+        }
+        Data = dataSource;
+    }
+
+    void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
+    {
+        if (e.IsNew)
+        {
+            var item = (Customer)e.EditModel;
+            item.FirstName = "John";
+            item.LastName = "Doe";
+        }
+    }
+    string serverError = string.Empty;
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        serverError = string.Empty;
+        var item = (Customer)e.EditModel;
+        try
+        {
+
+            if (e.IsNew)
+                await ctx.AddAsync<Customer>(item);
+            else
+            {
+                // get item from db and replace properties edited
+                var db = await ctx.FindAsync<Customer>(item.CustomerId);
+                if (db != null)
+                {
+                    db.FirstName = item.FirstName;
+                    db.LastName = item.LastName;
+                    db.Company = item.Company;
+                    db.Address = item.Address;
+                    db.City = item.City;
+                    db.State = item.State;
+                    db.Country = item.Country;
+                    db.PostalCode = item.PostalCode;
+                    db.Phone = item.Phone;
+                    db.Fax = item.Fax;
+                    db.Email = item.Email;
+                }
+            }
+            await ctx.SaveChangesAsync();
+        }
+        catch (Exception err)
+        {
+            e.Cancel = true;
+            serverError = err.InnerException == null
+                  ? err.Message
+                  : err.InnerException.Message;
+
+        }
+    }
+
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var item = (Customer)e.DataItem;
+        serverError = string.Empty;
+        try
+        {
+            var db = await ctx.FindAsync<Customer>(item.CustomerId);
+            if (db != null)
+            {
+                ctx.Customers.Remove(db);
+                await ctx.SaveChangesAsync();
+            }
+        }
+        catch (Exception err)
+        {
+            e.Cancel = true;
+            serverError = err.InnerException == null ? err.Message : err.InnerException.Message;
+        }
+    }
+}
