@@ -8,6 +8,7 @@
         EditModelSaving="Grid_EditModelSaving"
         DataItemDeleting="Grid_DataItemDeleting"
         EditMode="GridEditMode.PopupEditForm"
+        ValidationEnabled="true"
         ShowSearchBox="true"
         KeyFieldName="@Store.KeyField">
     <Columns>
@@ -43,24 +44,32 @@
             <DxFormLayoutItem Caption="" ColSpanSm="12" BeginRow="true"
                               CssClass="formlayout-validation-summary">
                 <Template>
-                    @if (serverError != null)
-                    {
-                        <div class="validation-errors" style="color: red;">
+                    <div class="validation-container" style="color:red;">
+                        <ValidationSummary @ref="validationSummary"></ValidationSummary>
                             <ul class="validation-errors">
+                        @if (serverError != null)
+                        {
                                 @foreach (var e in serverError.Errors)
                                 {
                                     <li>@e.ErrorMessage</li>
                                 }
-                            </ul>
-                        </div>
-                    }
+                            }
+                        </ul>
+                    </div>
                 </Template>
             </DxFormLayoutItem>
         </DxFormLayout>
     </EditFormTemplate>
+    <CustomValidators>
+        <FluentValidationValidator @ref="fluentValidator"></FluentValidationValidator>
+    </CustomValidators>
+
 </DxGrid>
 
 @code {
+    private FluentValidationValidator? fluentValidator;
+    private ValidationSummary? validationSummary;
+
     object Data { get; set; } = default!;
 
     protected override void OnInitialized()
@@ -73,7 +82,7 @@
             loadOptions.PrimaryKey = new[] { Store.KeyField };
             loadOptions.PaginateViaPrimaryKey = true;
         };
-        Data = dataSource;
+        Data = dataSource;        
     }
 
     void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
@@ -87,7 +96,7 @@
     }
     ValidationException? serverError = default!;
     async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
+    {       
         serverError = default!;
         var item = (CustomerModel)e.EditModel;
         var result = (e.IsNew)

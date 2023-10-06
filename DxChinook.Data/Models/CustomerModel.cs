@@ -24,5 +24,17 @@ namespace DxChinook.Data.Models
 
         public string FullName { get => $"{LastName}, {FirstName}"; }
     }
-    
+    public class CustomerModelValidator : AbstractValidator<CustomerModel>
+    {
+        public CustomerModelValidator()
+        {
+            RuleFor(x => x.LastName)
+                .NotEmpty();
+            RuleFor(x => x.FirstName)
+                .NotEqual("Don");
+            RuleFor(x => x.Email)
+                .NotEmpty()
+                .EmailAddress();
+        }
+    }
 }

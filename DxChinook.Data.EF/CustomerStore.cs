@@ -31,8 +31,7 @@ namespace DxChinook.Data.EF
         {
             RuleFor(x => x.LastName)
                 .NotEmpty();
-            RuleFor(x => x.FirstName)
-                    .NotEqual("Don");
+           
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .EmailAddress()

@@ -18,7 +18,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.RegisterDataServices(
     builder.Configuration.GetConnectionString("ChinookConnection"));
-
+builder.Services.RegisterModelValidators();
 
 builder.WebHost.UseWebRoot("wwwroot");
 builder.WebHost.UseStaticWebAssets();
