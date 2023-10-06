@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxBlazor.UI", "DxBlazor.UI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxChinook.Data.EF", "DxChinook.Data.EF\DxChinook.Data.EF.csproj", "{1866EE21-E945-473D-A575-947D34188F5A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxChinook.Data", "DxChinook.Data\DxChinook.Data.csproj", "{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1866EE21-E945-473D-A575-947D34188F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1866EE21-E945-473D-A575-947D34188F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1866EE21-E945-473D-A575-947D34188F5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

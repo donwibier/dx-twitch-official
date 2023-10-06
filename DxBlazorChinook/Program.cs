@@ -1,4 +1,5 @@
 using DxBlazorChinook.Data;
+using DxChinook.Data;
 using DxChinook.Data.EF;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -17,6 +18,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.RegisterDataServices(
     builder.Configuration.GetConnectionString("ChinookConnection"));
+
 
 builder.WebHost.UseWebRoot("wwwroot");
 builder.WebHost.UseStaticWebAssets();
