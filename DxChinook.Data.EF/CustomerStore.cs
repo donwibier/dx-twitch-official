@@ -20,6 +20,7 @@ namespace DxChinook.Data.EF
         }
 
         public override string KeyField => nameof(Customer.CustomerId);
+
         public override int ModelKey(CustomerModel model) => model.CustomerId;
         public override void SetModelKey(CustomerModel model, int key) => model.CustomerId = key;
         protected override int DBModelKey(Customer model) => model.CustomerId;

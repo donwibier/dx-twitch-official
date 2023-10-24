@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExtreme.AspNet.Core" Version="23.1.4" />
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.9.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DxChinook.Data.EF\DxChinook.Data.EF.csproj" />
+    <ProjectReference Include="..\..\DxChinook.Data\DxChinook.Data.csproj" />
+    <ProjectReference Include="..\DxChinookWASM.Client\DxChinookWASM.Client.csproj" />
+    <ProjectReference Include="..\DxChinookWASM.Shared\DxChinookWASM.Shared.csproj" />
+  </ItemGroup>
+</Project>

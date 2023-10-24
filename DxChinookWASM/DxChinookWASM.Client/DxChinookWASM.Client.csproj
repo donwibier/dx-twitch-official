@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Blazor" Version="23.1.4" />
+	<PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.1.4" />  
+	<PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DxBlazor.UI\DxBlazor.UI.csproj" />
+    <ProjectReference Include="..\..\DxChinook.Data\DxChinook.Data.csproj" />
+    <ProjectReference Include="..\DxChinookWASM.Shared\DxChinookWASM.Shared.csproj" />
+  </ItemGroup>
+</Project>
