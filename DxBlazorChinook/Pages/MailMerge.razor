@@ -50,7 +50,7 @@
     void FilterChanged(GridFilterCriteriaChangedEventArgs e)
     {
         //var c = e.
-        var result = Grid.GetStore().Query().AppendWhere(new CriteriaToExpressionConverter(), e.FilterCriteria) as IQueryable<CustomerModel>;
-        DataSource = result.ToList();
+        // var result = Grid.GetStore().Query().AppendWhere(new CriteriaToExpressionConverter(), e.FilterCriteria) as IQueryable<CustomerModel>;
+        // DataSource = result.ToList();
     }
 }

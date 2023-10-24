@@ -11,6 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxChinook.Data.EF", "DxChin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxChinook.Data", "DxChinook.Data\DxChinook.Data.csproj", "{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DxChinookWASM.Server", "DxChinookWASM\DxChinookWASM.Server\DxChinookWASM.Server.csproj", "{D30C6265-1003-4A05-A329-F762330B5FAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DxChinookWASM.Client", "DxChinookWASM\DxChinookWASM.Client\DxChinookWASM.Client.csproj", "{A275D2C2-0B24-44C1-92A5-FC7EF88F610E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DxChinookWASM.Shared", "DxChinookWASM\DxChinookWASM.Shared\DxChinookWASM.Shared.csproj", "{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,18 @@ Global
 		{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34310AAA-1B60-459D-94DF-C3BDAC8B5D69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D30C6265-1003-4A05-A329-F762330B5FAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D30C6265-1003-4A05-A329-F762330B5FAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D30C6265-1003-4A05-A329-F762330B5FAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D30C6265-1003-4A05-A329-F762330B5FAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A275D2C2-0B24-44C1-92A5-FC7EF88F610E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A275D2C2-0B24-44C1-92A5-FC7EF88F610E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A275D2C2-0B24-44C1-92A5-FC7EF88F610E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A275D2C2-0B24-44C1-92A5-FC7EF88F610E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

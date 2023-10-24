@@ -2,7 +2,7 @@
 @typeparam TModel where TModel : class, new()
 
 @inject IDataStore<TKey, TModel> Store
-
+@inject IDevExtremeLoader Loader
 
 <DxGrid Data="@Data"
         CustomizeEditModel="Grid_CustomizeEditModel"
@@ -68,18 +68,19 @@
 
         protected override void OnInitialized()
         {
-            var dataSource = new GridDevExtremeDataSource<TModel>(Store.Query());
-            if (PaginateViaPrimaryKey)
-            {
-                dataSource.CustomizeLoadOptions = (loadOptions) =>
-                {
-                    // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
-                    // This can make SQL execution plans more efficient.
-                    loadOptions.PrimaryKey = new[] { Store.KeyField };
-                    loadOptions.PaginateViaPrimaryKey = PaginateViaPrimaryKey;
-                };
-            }
-            Data = dataSource;            
+            // var dataSource = new GridDevExtremeDataSource<TModel>(Store.Query());
+            // if (PaginateViaPrimaryKey)
+            // {
+            //     dataSource.CustomizeLoadOptions = (loadOptions) =>
+            //     {
+            //         // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
+            //         // This can make SQL execution plans more efficient.
+            //         loadOptions.PrimaryKey = new[] { Store.KeyField };
+            //         loadOptions.PaginateViaPrimaryKey = PaginateViaPrimaryKey;
+            //     };
+            // }
+            // Data = dataSource;    
+            Data = Loader.GetDataSource<TKey, TModel>();
         }
 
         async Task Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)

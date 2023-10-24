@@ -1,10 +1,10 @@
-using DxBlazor.UI;
-using DxChinook.Data;
 using DxChinook.Data.Models;
+using DxChinook.Data;
 using DxChinookWASM.Client;
-using DxChinookWASM.Client.Data;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using DxChinookWASM.Client.Services;
+using DxBlazor.UI;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -16,6 +16,7 @@ builder.Services.AddDevExpressBlazor(options => {
 });
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddTransient<IDevExtremeLoader, DevExtremeClientLoader>();
-builder.Services.AddScoped<IDataStore<int, CustomerModel>, CustomerStore>();
+builder.Services.AddScoped<IDataStore<int, CustomerModel>, CustomerApiStore>();
+builder.Services.RegisterModelValidators();
 
 await builder.Build().RunAsync();
