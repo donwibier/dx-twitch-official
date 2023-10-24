@@ -51,6 +51,6 @@
     {
         //var c = e.
         var result = Grid.GetStore().Query().AppendWhere(new CriteriaToExpressionConverter(), e.FilterCriteria) as IQueryable<CustomerModel>;
-        DataSource = result.ToList()!;
+        DataSource = result.ToList();
     }
 }

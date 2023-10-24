@@ -21,8 +21,6 @@ builder.Services.RegisterDataServices(
     builder.Configuration.GetConnectionString("ChinookConnection"));
 builder.Services.RegisterModelValidators();
 
-builder.Services.AddTransient<IDevExtremeLoader, DevExtremeLoader>();
-
 builder.WebHost.UseWebRoot("wwwroot");
 builder.WebHost.UseStaticWebAssets();
 
