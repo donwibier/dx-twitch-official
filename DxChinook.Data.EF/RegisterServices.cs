@@ -10,6 +10,7 @@ namespace DxChinook.Data.EF
     public static class RegisterServices
     {
         public static IServiceCollection RegisterDataServices(this IServiceCollection services, string connectionString)
+            
         {
             services.AddAutoMapper(cfg => cfg.AddProfile<ChinookMappingProfile>());
             services.AddDbContext<ChinookContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Transient);

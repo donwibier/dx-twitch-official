@@ -28,13 +28,13 @@ namespace DxChinook.Data.Models
     {
         public CustomerModelValidator()
         {
-            RuleFor(x => x.LastName)
-                .NotEmpty();
-            RuleFor(x => x.FirstName)
-                .NotEqual("Don");
-            RuleFor(x => x.Email)
-                .NotEmpty()
-                .EmailAddress();
+            //RuleFor(x => x.LastName)
+            //    .NotEmpty();
+            //RuleFor(x => x.FirstName)
+            //    .NotEqual("Don");
+            //RuleFor(x => x.Email)
+            //    .NotEmpty()
+            //    .EmailAddress();
         }
     }
 }

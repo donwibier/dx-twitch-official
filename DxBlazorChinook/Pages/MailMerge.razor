@@ -1,0 +1,56 @@
+﻿@page "/mailmerge"
+@using DevExpress.Data.Linq;
+@using DevExpress.Data.Filtering;
+@using DevExpress.Data.Linq.Helpers;
+@using DevExtreme.AspNet.Data;
+
+@inject IDataStore<int, CustomerModel> Store
+
+<div class="w-100">
+    <DxTabs CssClass="w-100">
+        <DxTabPage Text="Data">
+            <BrowseAndEditCtrl @ref="Grid" TKey="int" TModel="CustomerModel" AllowDelete="false" 
+                AllowEdit="false" AllowInsert="false"
+                FilterChanged="@FilterChanged">
+                <GridColumns>
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.FirstName)" Caption="LastName" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.LastName)" Caption="LastName" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.Company)" Caption="Company" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.Address)" Caption="Address" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.City)" Caption="City" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.State)" Caption="State" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.Country)" Caption="Country" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.PostalCode)" Caption="PostalCode" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.Phone)" Caption="Phone" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.Fax)" Caption="Fax" />
+                    <DxGridDataColumn FieldName="@nameof(CustomerModel.Email)" Caption="Email" />
+                </GridColumns>
+            </BrowseAndEditCtrl>
+        </DxTabPage>
+        <DxTabPage Text="RichEdit">
+            <DxRichEdit ActiveRibbonTabIndex="5" CssClass="w-100 ch-720">
+                <MailMergeSettings>
+                    <DxMailMergeSettings Data="@DataSource" ViewMergedData="true" ActiveRecord="1" />
+                </MailMergeSettings>
+            </DxRichEdit>
+        </DxTabPage>
+    </DxTabs>
+</div>
+@code {
+    BrowseAndEditCtrl<int, CustomerModel> Grid;
+    IEnumerable<CustomerModel> DataSource;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //DocumentContent = await DocumentProvider.GetDocumentAsync("MailMergeTemplate.docx");
+        // DataSource = Store.Query().ToList();
+        await base.OnInitializedAsync();
+    }
+
+    void FilterChanged(GridFilterCriteriaChangedEventArgs e)
+    {
+        //var c = e.
+        var result = Grid.GetStore().Query().AppendWhere(new CriteriaToExpressionConverter(), e.FilterCriteria) as IQueryable<CustomerModel>;
+        DataSource = result.ToList()!;
+    }
+}

@@ -3,104 +3,125 @@
 
 @inject IDataStore<TKey, TModel> Store
 
+
 <DxGrid Data="@Data"
         CustomizeEditModel="Grid_CustomizeEditModel"
         EditModelSaving="Grid_EditModelSaving"
         DataItemDeleting="Grid_DataItemDeleting"
         EditMode="GridEditMode.PopupEditForm"
         ShowSearchBox="true"
+        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+        FilterCriteriaChanged="Grid_FilterChanged"
         KeyFieldName="@Store.KeyField">
     <Columns>
-        <DxGridCommandColumn Width="160px" />
+        <DxGridCommandColumn Width="160px" Visible="@ShowCommandColumn" EditButtonVisible="@AllowEdit" 
+            NewButtonVisible="@AllowInsert" DeleteButtonVisible="@AllowDelete" />
         @GridColumns
     </Columns>
     <EditFormTemplate Context="EditFormContext">
-        <DxFormLayout CssClass="w-100">
-            @EditFormLayoutItems(EditFormContext)
-            <DxFormLayoutItem Caption="" ColSpanSm="12" BeginRow="true"
-                              CssClass="formlayout-validation-summary">
-                <Template>
-                    <div class="validation-container" style="color:red;">
-                        <ValidationSummary @ref="validationSummary"></ValidationSummary>
-                        <ul class="validation-errors">
-                            @if (serverError != null)
-                            {
-                                @foreach (var e in serverError.Errors)
-                                {
-                                    <li>@e.ErrorMessage</li>
-                                }
+                @if (EditFormLayoutItems != null)
+                {
+                    <DxFormLayout CssClass="w-100">
+                                @EditFormLayoutItems(EditFormContext)
+                        <DxFormLayoutItem Caption="" ColSpanSm="12" BeginRow="true"
+                                          CssClass="formlayout-validation-summary">
+                            <Template>
+                                <div class="validation-container" style="color:red;">
+                                    <ValidationSummary @ref="validationSummary"></ValidationSummary>
+                                    <ul class="validation-errors">
+                                        @if (serverError != null)
+                                        {
+                                            @foreach (var e in serverError.Errors)
+                                            {
+                                                <li>@e.ErrorMessage</li>
+                                            }
 
-                            }
-                        </ul>
-                    </div>
-                </Template>
-            </DxFormLayoutItem>
-        </DxFormLayout>
-    </EditFormTemplate>
+                                        }
+                                    </ul>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                    </DxFormLayout>
+            }
+        </EditFormTemplate>
     <CustomValidators>
         <FluentValidationValidator @ref="fluentValidator"></FluentValidationValidator>
     </CustomValidators>
 </DxGrid>
 
-@code {
-    private FluentValidationValidator? fluentValidator;
-    private ValidationSummary? validationSummary;
-    object Data { get; set; } = default!;
+    @code {
+        private FluentValidationValidator? fluentValidator;
+        private ValidationSummary? validationSummary;
+        object Data { get; set; } = default!;
 
-    [Parameter] public bool PaginateViaPrimaryKey { get; set; }
-    [Parameter] public RenderFragment GridColumns { get; set; } = default!;
-    [Parameter] public RenderFragment<GridEditFormTemplateContext> EditFormLayoutItems { get; set; } = default!;
-    [Parameter] public Action<TModel> InitNewItemAction { get; set; } = default!;
+        [Parameter] public bool PaginateViaPrimaryKey { get; set; }
+        [Parameter] public RenderFragment GridColumns { get; set; } = default!;
+        [Parameter] public RenderFragment<GridEditFormTemplateContext> EditFormLayoutItems { get; set; } = default!;
+        [Parameter] public Action<TModel> InitNewItemAction { get; set; } = default!;
+        [Parameter] public bool AllowInsert { get; set; } = true;
+        [Parameter] public bool AllowEdit { get; set; } = true;
+        [Parameter] public bool AllowDelete { get; set; } = true;
 
-    protected override void OnInitialized()
-    {
-        var dataSource = new GridDevExtremeDataSource<TModel>(Store.Query());
-        if (PaginateViaPrimaryKey)
+        public bool ShowCommandColumn { get => AllowInsert || AllowEdit || AllowDelete; }
+
+        public IDataStore<TKey, TModel> GetStore() => Store;
+
+        protected override void OnInitialized()
         {
-            dataSource.CustomizeLoadOptions = (loadOptions) =>
+            var dataSource = new GridDevExtremeDataSource<TModel>(Store.Query());
+            if (PaginateViaPrimaryKey)
             {
-                // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
-                // This can make SQL execution plans more efficient.
-                loadOptions.PrimaryKey = new[] { Store.KeyField };
-                loadOptions.PaginateViaPrimaryKey = PaginateViaPrimaryKey;
-            };
+                dataSource.CustomizeLoadOptions = (loadOptions) =>
+                {
+                    // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
+                    // This can make SQL execution plans more efficient.
+                    loadOptions.PrimaryKey = new[] { Store.KeyField };
+                    loadOptions.PaginateViaPrimaryKey = PaginateViaPrimaryKey;
+                };
+            }
+            Data = dataSource;            
         }
-        Data = dataSource;
-    }
 
-    void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
-    {
-        //if (e.IsNew)
-        //{
-        //    var item = (CustomerModel)e.EditModel;
-        //    item.FirstName = "John";
-        //    item.LastName = "Doe";
-        //}
-    }
-    ValidationException? serverError = default!;
-    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
-        serverError = null;
-        var item = (TModel)e.EditModel;
-        var result = (e.IsNew)
-            ? await Store.CreateAsync(item)
-            : await Store.UpdateAsync(item);
-        if (!result.Success)
+        async Task Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
         {
-            e.Cancel = true;
-            serverError = result.Exception as ValidationException;
+            if (e.IsNew && (InitNewItemAction != null))
+            {
+                var item = (TModel)e.EditModel;                
+                await InvokeAsync(() => InitNewItemAction(item));
+            }
         }
-    }
+        ValidationException? serverError = default!;
+        async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+        {
+            serverError = null;
+            var item = (TModel)e.EditModel;
+            var result = (e.IsNew)
+                ? await Store.CreateAsync(item)
+                : await Store.UpdateAsync(item);
+            if (!result.Success)
+            {
+                e.Cancel = true;
+                serverError = result.Exception as ValidationException;
+            }
+        }
 
-    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
-    {
-        serverError = null;
-        var item = (TModel)e.DataItem;
-        var result = await Store.DeleteAsync(Store.ModelKey(item));
-        if (!result.Success)
+        async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
         {
-            e.Cancel = true;
-            serverError = result.Exception as ValidationException;
+            serverError = null;
+            var item = (TModel)e.DataItem;
+            var result = await Store.DeleteAsync(Store.ModelKey(item));
+            if (!result.Success)
+            {
+                e.Cancel = true;
+                serverError = result.Exception as ValidationException;
+            }
         }
-    }
+        [Parameter] public Action<GridFilterCriteriaChangedEventArgs> FilterChanged { get; set; } = default!;
+        async void Grid_FilterChanged(GridFilterCriteriaChangedEventArgs e)
+        {
+            if (FilterChanged != null)
+            {
+                await InvokeAsync(() => FilterChanged(e));
+            }
+        }
 }

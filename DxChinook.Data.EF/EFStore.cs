@@ -36,7 +36,7 @@ namespace DxChinook.Data.EF
         public ValidationException Exception { get; set; } = default!;
     }
 
-    public abstract class EFDataStore<TEFContext, TKey, TModel, TDBModel> : IDataStore<TKey, TModel>
+    public abstract class EFDataStore<TEFContext, TKey, TModel, TDBModel> : IDataStore<TKey, TModel>            
         where TEFContext : DbContext, new()
         where TKey : IEquatable<TKey>
         where TModel : class, new()
@@ -118,6 +118,7 @@ namespace DxChinook.Data.EF
         }        
         public abstract string KeyField { get; }
         public abstract void SetModelKey(TModel model, TKey key);
+        
 
         public abstract TKey ModelKey(TModel model);
 

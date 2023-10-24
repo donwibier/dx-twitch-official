@@ -28,10 +28,10 @@ namespace DxChinook.Data
     {
         string KeyField { get; }        
         TModel GetByKey(TKey key);
+        TKey ModelKey(TModel model);
+        void SetModelKey(TModel model, TKey key);        
         IQueryable<T> Query<T>() where T : class, new();
         IQueryable<TModel> Query();
-        TKey ModelKey(TModel model);
-        void SetModelKey(TModel model, TKey key);
         Task<IDataResult> CreateAsync(params TModel[] items);
         Task<IDataResult> UpdateAsync(params TModel[] items);
         Task<IDataResult> DeleteAsync(params TKey[] ids);
