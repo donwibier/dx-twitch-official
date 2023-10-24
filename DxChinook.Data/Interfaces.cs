@@ -30,10 +30,19 @@ namespace DxChinook.Data
         TModel GetByKey(TKey key);
         TKey ModelKey(TModel model);
         void SetModelKey(TModel model, TKey key);        
-        IQueryable<T> Query<T>() where T : class, new();
-        IQueryable<TModel> Query();
         Task<IDataResult> CreateAsync(params TModel[] items);
         Task<IDataResult> UpdateAsync(params TModel[] items);
         Task<IDataResult> DeleteAsync(params TKey[] ids);
     }
+
+    public interface IQueryableDataStore<TKey, TModel> : IDataStore<TKey, TModel>
+        where TKey : IEquatable<TKey>
+        where TModel : class, new()
+    {
+        IQueryable<T> Query<T>() where T : class, new();
+        IQueryable<TModel> Query();
+
+    }
+
+
 }

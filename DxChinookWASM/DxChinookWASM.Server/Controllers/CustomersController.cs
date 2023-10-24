@@ -1,65 +1,28 @@
-﻿using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Mvc;
+﻿using DevExtreme.AspNet.Mvc;
 using DxChinook.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-
 using DxChinook.Data.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DxChinookWASM.Server.Controllers
-{  
-    [Route("api/[controller]/[action]")]
+{
+    [Route("api/[controller]")]
     public class CustomersController : BaseController<int, CustomerModel>
     {
         public CustomersController(IDataStore<int, CustomerModel> store) : base(store)
         {
 
         }
+        [HttpGet]
+        public override Task<IActionResult> Get(DataSourceLoadOptions loadOptions) => base.Get(loadOptions);
 
-        [HttpGet(Name ="Get")]
-        public override async Task<IActionResult> Get(DataSourceLoadOptions loadOptions) {
-            return await base.Get(loadOptions);
-        }
-        //[HttpGet]
-        //public override IActionResult ByKey(int key)
-        //{
-        //    return base.Get(key);
-        //}
+        [HttpGet("{key}")]
+        public override IActionResult Get(int key) => base.Get(key);
         [HttpPost]
-        public override async Task<IActionResult> Post(CustomerModel model)
-        {
-            return await base.Post(model);
-        }
-
-        [HttpPut]
-        public override async Task<IActionResult> Put(CustomerModel model)
-        {
-            return await base.Put(model);
-        }
-
-        [HttpDelete]
-        public override async Task Delete(int key) 
-        {            
-            await base.Delete(key);
-        }
-
-        //[HttpGet]
-        //public async Task<IActionResult> EmployeesLookup(DataSourceLoadOptions loadOptions) {
-        //    var lookup = from i in _context.Employees
-        //                 orderby i.Title
-        //                 select new {
-        //                     Value = i.EmployeeId,
-        //                     Text = i.Title
-        //                 };
-        //    return Json(await DataSourceLoader.LoadAsync(lookup, loadOptions));
-        //}
+        public override Task<IActionResult> Post([FromBody]CustomerModel model) => base.Post(model);
+        [HttpPut("{key}")]
+        public override Task<IActionResult> Put(int key, [FromBody]CustomerModel model) => base.Put(key, model);
+        [HttpDelete("{key}")]
+        public override Task Delete(int key) => base.Delete(key);
     }
 }

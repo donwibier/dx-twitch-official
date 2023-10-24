@@ -6,10 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Blazor" Version="23.1.4" />
-	<PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.1.4" />  
-	<PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.1.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DxBlazor.UI\DxBlazor.UI.csproj" />

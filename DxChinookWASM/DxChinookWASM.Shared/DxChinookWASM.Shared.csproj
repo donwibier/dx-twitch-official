@@ -7,4 +7,7 @@
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.1.4" />
+  </ItemGroup>
 </Project>

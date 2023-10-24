@@ -16,7 +16,7 @@ builder.Services.AddDevExpressBlazor(options => {
     options.SizeMode = DevExpress.Blazor.SizeMode.Medium;
 });
 builder.Services.AddSingleton<WeatherForecastService>();
-
+builder.Services.AddTransient<IDevExtremeLoader, DevExtremeServerLoader>();
 builder.Services.RegisterDataServices(
     builder.Configuration.GetConnectionString("ChinookConnection"));
 builder.Services.RegisterModelValidators();

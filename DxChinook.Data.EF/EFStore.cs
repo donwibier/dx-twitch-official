@@ -12,31 +12,7 @@ using System.Threading.Tasks;
 
 namespace DxChinook.Data.EF
 {
-    public class EFResult : IDataResult
-    {
-        public EFResult()
-        {
-
-        }
-        public EFResult(DataMode mode, string propertyName, Exception err)
-        {
-            Mode = mode;
-            Success = (err == null);
-            if (!Success)
-            {
-                Exception = (err as ValidationException)!;
-                if (Exception == null)
-                    Exception = new ValidationException(new[] {
-                        new ValidationFailure(propertyName, err!.InnerException == null ? err.Message : err.InnerException.Message)
-                    });
-            }
-        }
-        public bool Success { get; set; }
-        public DataMode Mode { get; set; }
-        public ValidationException Exception { get; set; } = default!;
-    }
-
-    public abstract class EFDataStore<TEFContext, TKey, TModel, TDBModel> : IDataStore<TKey, TModel>            
+    public abstract class EFDataStore<TEFContext, TKey, TModel, TDBModel> : IQueryableDataStore<TKey, TModel>            
         where TEFContext : DbContext, new()
         where TKey : IEquatable<TKey>
         where TModel : class, new()
@@ -162,11 +138,11 @@ namespace DxChinook.Data.EF
                         }
                         await s.DbContext.SaveChangesAsync();
                         await t.CommitAsync();
-                        return new EFResult { Success = true, Mode = DataMode.Create };
+                        return new DataResult { Success = true, Mode = DataMode.Create };
                     }
                     catch (Exception err)
                     {
-                        return new EFResult(DataMode.Create, nameof(TDBModel), err);
+                        return new DataResult(DataMode.Create, nameof(TDBModel), err);
                     }
                 },
                 false);
@@ -199,11 +175,11 @@ namespace DxChinook.Data.EF
                     }
                     await s.DbContext.SaveChangesAsync();
                     await t.CommitAsync();
-                    return new EFResult { Success = true, Mode = DataMode.Update };
+                    return new DataResult { Success = true, Mode = DataMode.Update };
                 }
                 catch (Exception err)
                 {
-                    return new EFResult(DataMode.Update, nameof(TDBModel), err);
+                    return new DataResult(DataMode.Update, nameof(TDBModel), err);
                 }
             }, false);
             return result;
@@ -234,11 +210,11 @@ namespace DxChinook.Data.EF
 
                     await s.DbContext.SaveChangesAsync();
                     await t.CommitAsync();
-                    return new EFResult { Success = true, Mode = DataMode.Delete };
+                    return new DataResult { Success = true, Mode = DataMode.Delete };
                 }
                 catch (ValidationException err)
                 {
-                    return new EFResult(DataMode.Delete, nameof(TDBModel), err);
+                    return new DataResult(DataMode.Delete, nameof(TDBModel), err);
                 }
             }, false);
             return result;

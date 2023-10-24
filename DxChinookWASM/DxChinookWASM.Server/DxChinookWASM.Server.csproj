@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -8,6 +8,8 @@
     <PackageReference Include="DevExtreme.AspNet.Core" Version="23.1.4" />
     <PackageReference Include="DevExtreme.AspNet.Data" Version="2.9.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0" />
+    <PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DxChinook.Data.EF\DxChinook.Data.EF.csproj" />
