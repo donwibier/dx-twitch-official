@@ -42,10 +42,7 @@ namespace DxChinookWASM.Client.Services
                     SetModelKey(item, key!);
                 }
                 else
-                {
-                    var err = JsonConvert.DeserializeObject<ValidationFailure[]>(response)!;
-                    return new DataResult(DataMode.Create, nameof(TModel), new ValidationException(err));
-                }
+                    return new DataResult(DataMode.Create, nameof(TModel), ValidationExceptionFromResponse(response));
             }
             return new DataResult { Mode = DataMode.Create, Success = true };
         }
@@ -57,10 +54,7 @@ namespace DxChinookWASM.Client.Services
                 var result = await Http.PutAsJsonAsync($"{ControllerBase}/{ModelKey(item)}", item);
                 var response = await result.Content.ReadAsStringAsync();
                 if (!result.IsSuccessStatusCode)
-                {
-                    var err = JsonConvert.DeserializeObject<ValidationFailure[]>(response)!;
-                    return new DataResult(DataMode.Update, nameof(TModel), new ValidationException(err));
-                }
+                    return new DataResult(DataMode.Update, nameof(TModel), ValidationExceptionFromResponse(response));
             }
             return new DataResult { Mode = DataMode.Update, Success = true };
         }
@@ -72,10 +66,30 @@ namespace DxChinookWASM.Client.Services
                 var result = await Http.DeleteAsync($"{ControllerBase}/{id}");
                 var response = await result.Content.ReadAsStringAsync();
                 if (!result.IsSuccessStatusCode)
-                    return new DataResult(DataMode.Delete, nameof(TModel), new ValidationException(response));
+                    return new DataResult(DataMode.Delete, nameof(TModel), ValidationExceptionFromResponse(response));
             }
 
             return new DataResult { Mode = DataMode.Delete, Success = true };
+        }
+
+        protected virtual ValidationException ValidationExceptionFromResponse(string response)
+        {
+            if (response.StartsWith("\"") && response.EndsWith("\""))
+                response = response.Substring(1, response.Length - 2);            
+            response = response.Replace("\\", "");
+
+            ValidationException result = null!;
+            try
+            {
+                var err = JsonConvert.DeserializeObject<ValidationFailure[]>(response)!;
+                result = new ValidationException(err);
+            }
+            catch (Exception ex){
+                result = new ValidationException("There are errors!", new[] {
+                                new ValidationFailure("Validation error", $"Please check required fields (^{ex.Message}^)")
+                            });
+            }           
+            return result;
         }
     }
 }
