@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DxChinook.Data.Models
 {
+    
     public class CustomerModel
     {
         public int CustomerId { get; set; }
