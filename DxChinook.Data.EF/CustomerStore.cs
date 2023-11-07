@@ -16,7 +16,7 @@ namespace DxChinook.Data.EF
         public CustomerStore(ChinookContext context, IMapper mapper, 
             IValidator<Customer> validator) : base(context, mapper, validator)
         {
-
+            // https://github.com/donwibier/dx-twitch-official
         }
 
         public override string KeyField => nameof(Customer.CustomerId);
@@ -32,7 +32,9 @@ namespace DxChinook.Data.EF
         {
             RuleFor(x => x.LastName)
                 .NotEmpty();
-           
+            RuleFor(x => x.SupportRepId)
+                .NotEmpty();
+
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .EmailAddress()

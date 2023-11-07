@@ -1,4 +1,6 @@
 ﻿using DevExpress.Blazor;
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 using DxBlazor.UI;
 using DxChinook.Data;
 
@@ -29,6 +31,16 @@ namespace DxBlazorChinook.Data
                     loadOptions.PaginateViaPrimaryKey = store.PaginateViaPrimaryKey;
                 };
             }
+            return dataSource;
+        }
+
+        public async Task<LoadResult> GetLookupDataSource<TKey, TModel>(DataSourceLoadOptionsBase options, CancellationToken cancellationToken)
+            where TKey : IEquatable<TKey>
+            where TModel : class, new()
+        {
+            var store = serviceProvider.GetRequiredService<IDataStore<TKey, TModel>>() as IQueryableDataStore<TKey, TModel>;
+            ArgumentNullException.ThrowIfNull(store);
+            var dataSource = await DataSourceLoader.LoadAsync<TModel>(store.Query(), options, cancellationToken);
             return dataSource;
         }
     }

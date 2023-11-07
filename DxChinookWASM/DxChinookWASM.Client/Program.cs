@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using DxChinookWASM.Client.Services;
 using DxBlazor.UI;
 
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -16,7 +17,7 @@ builder.Services.AddDevExpressBlazor(options => {
 });
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddTransient<IDevExtremeLoader, DevExtremeClientLoader>();
-builder.Services.AddScoped<IDataStore<int, CustomerModel>, CustomerApiStore>();
+builder.Services.RegisterClientDataServices();
 builder.Services.RegisterModelValidators();
 
 await builder.Build().RunAsync();

@@ -11,11 +11,12 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.13" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DxBlazor.UI\DxBlazor.UI.csproj" />
     <ProjectReference Include="..\DxChinook.Data.EF\DxChinook.Data.EF.csproj" />
     <ProjectReference Include="..\DxChinook.Data\DxChinook.Data.csproj" />
+    <ProjectReference Include="..\DxChinookWASM\DxChinookWASM.Client\DxChinookWASM.Client.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 </Project>

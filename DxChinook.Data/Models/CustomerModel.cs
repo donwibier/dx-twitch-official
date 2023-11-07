@@ -22,6 +22,9 @@ namespace DxChinook.Data.Models
         public string? Phone { get; set; }
         public string? Fax { get; set; }
         public string Email { get; set; } = null!;
+        
+        public int SupportRepId { get; set; }
+        public string SupportRepName { get; set; }
 
         public string FullName { get => $"{LastName}, {FirstName}"; }
     }
@@ -29,8 +32,8 @@ namespace DxChinook.Data.Models
     {
         public CustomerModelValidator()
         {
-            //RuleFor(x => x.LastName)
-            //    .NotEmpty();
+            RuleFor(x => x.SupportRepId)
+                .NotEmpty();
             //RuleFor(x => x.FirstName)
             //    .NotEqual("Don");
             //RuleFor(x => x.Email)
