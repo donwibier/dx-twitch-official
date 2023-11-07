@@ -31,7 +31,7 @@ namespace DxChinook.Data.EF
         protected IMapper Mapper { get; }
         public TEFContext DbContext { get; }
         public IValidator<TDBModel> Validator { get; }
-
+        public virtual bool PaginateViaPrimaryKey { get => false; }
         public TModel CreateModel()
         {
             return new TModel();

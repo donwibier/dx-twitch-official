@@ -19,16 +19,16 @@ namespace DxBlazorChinook.Data
             var store = serviceProvider.GetRequiredService<IDataStore<TKey, TModel>>() as IQueryableDataStore<TKey, TModel>;
             ArgumentNullException.ThrowIfNull(store);
             var dataSource = new GridDevExtremeDataSource<TModel>(store.Query());
-            //if (PaginateViaPrimaryKey)
-            //{
-            //    dataSource.CustomizeLoadOptions = (loadOptions) =>
-            //    {
-            //        // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
-            //        // This can make SQL execution plans more efficient.
-            //        loadOptions.PrimaryKey = new[] { Store.KeyField };
-            //        loadOptions.PaginateViaPrimaryKey = PaginateViaPrimaryKey;
-            //    };
-            //}
+            if (store.PaginateViaPrimaryKey)
+            {
+                dataSource.CustomizeLoadOptions = (loadOptions) =>
+                {
+                    // If underlying data is a large SQL table, specify PrimaryKey and PaginateViaPrimaryKey.
+                    // This can make SQL execution plans more efficient.
+                    loadOptions.PrimaryKey = new[] { store.KeyField };
+                    loadOptions.PaginateViaPrimaryKey = store.PaginateViaPrimaryKey;
+                };
+            }
             return dataSource;
         }
     }

@@ -39,6 +39,7 @@ namespace DxChinook.Data
         where TKey : IEquatable<TKey>
         where TModel : class, new()
     {
+        bool PaginateViaPrimaryKey { get; }
         IQueryable<T> Query<T>() where T : class, new();
         IQueryable<TModel> Query();
 
