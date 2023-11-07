@@ -10,8 +10,9 @@ namespace DxChinookWASM.Client.Services
         public static IServiceCollection RegisterClientDataServices(this IServiceCollection services)
         {
             services.AddTransient<IDevExtremeLoader, DevExtremeClientLoader>();
-            services.AddScoped<IDataStore<int, CustomerModel>, CustomerApiStore>();            
 
+            services.AddScoped<IDataStore<int, CustomerModel>, CustomerApiStore>();
+            services.AddScoped<IDataStore<int, EmployeeModel>, EmployeeApiStore>();
             return services;
         }
 

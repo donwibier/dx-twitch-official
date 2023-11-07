@@ -18,8 +18,12 @@ namespace DxChinook.Data.EF
             //more services here...
             services.AddScoped<IDataStore<int, CustomerModel>, CustomerStore>();
             services.AddScoped<IValidator<Customer>, CustomerValidator>();
+            
             services.AddScoped<IDataStore<int, ArtistModel>, ArtistStore>();
             services.AddScoped<IValidator<Artist>, ArtistValidator>();
+            
+            services.AddScoped<IDataStore<int, EmployeeModel>, EmployeeStore>();
+            services.AddScoped<IValidator<Employee>, EmployeeValidator>();
 
             return services;
         }
@@ -30,9 +34,13 @@ namespace DxChinook.Data.EF
         public ChinookMappingProfile()
         {
             CreateMap<Customer, CustomerModel>()
+                .ForMember(dest=>dest.SupportRepName, opt => opt.MapFrom(src => src.SupportRep != null ? $"{src.SupportRep.FirstName} {src.SupportRep.LastName}" : ""))
                 .ReverseMap();
             CreateMap<Artist, ArtistModel>()
                 .ReverseMap();
+            CreateMap<Employee, EmployeeModel>()
+                .ReverseMap();
+
         }
     }
 }
