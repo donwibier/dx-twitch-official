@@ -204,7 +204,14 @@ namespace DxChinook.Data.EF
                                 throw new ValidationException(validationResult.Errors);
 
                             DbContext.Entry(dbModel).State = EntityState.Deleted;
-                            await DbContext.SaveChangesAsync();
+                            try
+                            {
+                                await DbContext.SaveChangesAsync();
+                            }
+                            catch (Exception err)
+                            {
+                                return new DataResult(DataMode.Delete, nameof(TDBModel), err);
+                            }
                         }
                     }
 
