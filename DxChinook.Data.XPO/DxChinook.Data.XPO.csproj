@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />		
+    <PackageReference Include="DevExpress.Xpo" Version="23.1.4" />
+  	<PackageReference Include="FluentValidation" Version="11.8.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DxChinook.Data\DxChinook.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ChinookModel.xpo.diagram">
+      <AutoGen>True</AutoGen>
+    </None>
+  </ItemGroup>
+
+</Project>

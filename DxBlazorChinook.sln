@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxChinookWASM.Client", "DxC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxChinookWASM.Shared", "DxChinookWASM\DxChinookWASM.Shared\DxChinookWASM.Shared.csproj", "{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DxChinook.Data.XPO", "DxChinook.Data.XPO\DxChinook.Data.XPO.csproj", "{8A94B3DC-BBC3-44F1-B9A9-8EE3013604A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B74944F5-19B9-4ABB-B70F-1025B8AA2C31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A94B3DC-BBC3-44F1-B9A9-8EE3013604A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A94B3DC-BBC3-44F1-B9A9-8EE3013604A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A94B3DC-BBC3-44F1-B9A9-8EE3013604A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A94B3DC-BBC3-44F1-B9A9-8EE3013604A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

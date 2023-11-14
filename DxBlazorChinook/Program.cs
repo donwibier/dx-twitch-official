@@ -2,6 +2,7 @@ using DxBlazor.UI;
 using DxBlazorChinook.Data;
 using DxChinook.Data;
 using DxChinook.Data.EF;
+using DxChinook.Data.XPO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -17,8 +18,11 @@ builder.Services.AddDevExpressBlazor(options => {
 });
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<IDevExtremeLoader, DevExtremeServerLoader>();
-builder.Services.RegisterDataServices(
-    builder.Configuration.GetConnectionString("ChinookConnection"));
+//builder.Services.RegisterDataServices(
+//    builder.Configuration.GetConnectionString("ChinookConnection"));
+builder.Services.RegisterXPODataServices(
+	builder.Configuration.GetConnectionString("ChinookConnection"));
+
 builder.Services.RegisterModelValidators();
 
 builder.WebHost.UseWebRoot("wwwroot");
