@@ -1,11 +1,12 @@
 ﻿@page "/customers-client"
 @using DevExtreme.AspNet.Data.ResponseModel;
 @using DevExtreme.AspNet.Data;
-@rendermode RenderMode.InteractiveWebAssembly
+
+@rendermode RenderMode.InteractiveAuto
 
 @inject IDataStore<int, EmployeeModel> store
 @inject IDevExtremeLoader loader
-
+<h2>Clientside version</h2>
 <BrowseAndEditCtrl TKey="int" TModel="CustomerModel">
     <GridColumns>
         <DxGridDataColumn FieldName="@nameof(CustomerModel.FirstName)" Caption="LastName" />

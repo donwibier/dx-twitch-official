@@ -3,12 +3,18 @@ using DxBlazor.UI;
 using DxChinook.Data;
 using DxChinook.Data.EF;
 using DxChinookv8.Client.Pages;
-using DxBlazor.UI;
+
 using DxChinookv8.Data;
 using DxChinookv8.Components;
+using DxChinook.Data.Models;
+using DxChinookv8;
+using DevExtreme.AspNet.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
+// Add services to the container.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -39,10 +45,20 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
-
+app.UseSwagger();
+// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+// specifying the Swagger JSON endpoint.
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ChinookAPI");
+});
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Counter).Assembly);
+
+app.MapStoreController<int, CustomerModel>("Customers");
+app.MapStoreController<int, EmployeeModel>("Employees");
+
 
 app.Run();

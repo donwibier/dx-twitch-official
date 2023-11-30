@@ -6,9 +6,15 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Blazor" Version="23.2.2-beta" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.*-*" />
+	  <PackageReference Include="DevExtreme.AspNet.Core" Version="23.2.2-beta" />
+	  <PackageReference Include="DevExtreme.AspNet.Data" Version="3.0.0" />
+
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.*-*" />
     <PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.2.2-beta" />
 	  <PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DxBlazor.UI\DxBlazor.UI.csproj" />
