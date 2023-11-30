@@ -5,7 +5,7 @@
 @attribute [StreamRendering(true)]
 @inject IDataStore<int, EmployeeModel> store
 @inject IDevExtremeLoader loader
-
+<h2>Server rendered</h2>
 <BrowseAndEditCtrl TKey="int" TModel="CustomerModel">
     <GridColumns>
         <DxGridDataColumn FieldName="@nameof(CustomerModel.FirstName)" Caption="LastName" />
