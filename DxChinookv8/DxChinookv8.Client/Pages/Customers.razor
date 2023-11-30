@@ -1,0 +1,57 @@
+﻿@page "/customers-client"
+@using DevExtreme.AspNet.Data.ResponseModel;
+@using DevExtreme.AspNet.Data;
+@rendermode RenderMode.InteractiveWebAssembly
+
+@inject IDataStore<int, EmployeeModel> store
+@inject IDevExtremeLoader loader
+
+<BrowseAndEditCtrl TKey="int" TModel="CustomerModel">
+    <GridColumns>
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.FirstName)" Caption="LastName" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.LastName)" Caption="LastName" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.Company)" Caption="Company" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.Address)" Caption="Address" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.City)" Caption="City" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.State)" Caption="State" />
+         <DxGridDataColumn FieldName="@nameof(CustomerModel.Country)" Caption="Country" Visible="false" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.PostalCode)" Caption="PostalCode" Visible="false" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.Phone)" Caption="Phone" Visible="false" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.Fax)" Caption="Fax" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.Email)" Caption="Email" />
+        <DxGridDataColumn FieldName="@nameof(CustomerModel.SupportRepId)" Caption="Support Rep" >
+            <CellDisplayTemplate>@context.GetRowValue(nameof(CustomerModel.SupportRepName))</CellDisplayTemplate>
+            </DxGridDataColumn>
+    </GridColumns>
+    <EditFormLayoutItems Context="ctx">
+        @{
+            var item = (CustomerModel)ctx.EditModel;
+        }
+        <DxFormLayoutItem Caption="FirstName" ColSpanMd="6"><DxTextBox @bind-Text="item.FirstName" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="LastName" ColSpanMd="6"><DxTextBox @bind-Text="item.LastName" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Company" ColSpanMd="6"><DxTextBox @bind-Text="item.Company" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Address" ColSpanMd="6"><DxTextBox @bind-Text="item.Address" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="City" ColSpanMd="6"><DxTextBox @bind-Text="item.City" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="State" ColSpanMd="6"><DxTextBox @bind-Text="item.State" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Country" ColSpanMd="6"><DxTextBox @bind-Text="item.Country" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="PostalCode" ColSpanMd="6"><DxTextBox @bind-Text="item.PostalCode" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Phone" ColSpanMd="6"><DxTextBox @bind-Text="item.Phone" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Fax" ColSpanMd="6"><DxTextBox @bind-Text="item.Fax" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Email" ColSpanMd="6"><DxTextBox @bind-Text="item.Email" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Support Rep" ColSpanMd="6">
+            <DxComboBox CustomData="@LoadEmployees" TData="EmployeeModel" TValue="int"
+                        TextFieldName="@nameof(EmployeeModel.FullName)"
+                        ValueFieldName="@nameof(EmployeeModel.EmployeeId)"
+                        @bind-Value="@item.SupportRepId">
+            </DxComboBox>
+        </DxFormLayoutItem>
+    </EditFormLayoutItems>
+</BrowseAndEditCtrl>
+
+@code{
+
+    protected Task<LoadResult> LoadEmployees(DataSourceLoadOptionsBase options, CancellationToken cancellationToken)
+    {
+        return loader.GetLookupDataSource<int, EmployeeModel>(options, cancellationToken);
+    }
+}
