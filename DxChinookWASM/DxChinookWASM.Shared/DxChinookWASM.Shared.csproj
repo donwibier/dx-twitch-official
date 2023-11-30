@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -8,6 +8,6 @@
     <SupportedPlatform Include="browser" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.1.4" />
+    <PackageReference Include="DevExpress.Blazor.RichEdit" Version="23.2.2-beta" />
   </ItemGroup>
 </Project>
