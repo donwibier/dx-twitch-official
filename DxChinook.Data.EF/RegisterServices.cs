@@ -25,6 +25,16 @@ namespace DxChinook.Data.EF
             services.AddScoped<IDataStore<int, EmployeeModel>, EmployeeStore>();
             services.AddScoped<IValidator<Employee>, EmployeeValidator>();
 
+            services.AddScoped<IDataStore<int, InvoiceModel>, InvoiceStore>();
+            services.AddScoped<IValidator<Invoice>, InvoiceValidator>();
+            
+            services.AddScoped<IDataStore<int, InvoiceLineModel>, InvoiceLineStore>();
+            
+            services.AddScoped(x => (x.GetRequiredService<IDataStore<int, InvoiceLineModel>>() as IInvoiceLineStore)!);
+
+            services.AddScoped<IValidator<InvoiceLine>, InvoiceLineValidator>();
+
+
             return services;
         }
     }
@@ -41,6 +51,20 @@ namespace DxChinook.Data.EF
             CreateMap<Employee, EmployeeModel>()
                 .ReverseMap();
 
+            CreateMap<Invoice, InvoiceModel>()
+                .ForMember(dest => dest.InvoiceLines, opt => opt.Ignore())
+                .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.CustomerId != 0 ? $"{src.Customer.LastName}, {src.Customer.FirstName}" : ""))
+                .ReverseMap()
+                    .ForMember(dest => dest.InvoiceLines, opt => opt.Ignore());
+
+            CreateMap<InvoiceLine, InvoiceLineModel>()
+                .ReverseMap()
+                    .ForMember(dest => dest.Track, opt => opt.Ignore())
+                ;
+            
+            CreateMap<Track, TrackModel>()
+                .ReverseMap();
+            //.ForMember(dest => dest., opt => opt.Ignore());
         }
     }
 }

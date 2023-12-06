@@ -1,0 +1,59 @@
+﻿<DxGrid @ref="itemsGrid" Data="@Invoice.InvoiceLines"
+         EditMode="GridEditMode.EditRow"
+         KeyboardNavigationEnabled="true"
+         EditorRenderMode="GridEditorRenderMode.Integrated"
+         CssClass="w-100"
+         KeyFieldName="@nameof(InvoiceLineModel.InvoiceLineId)"
+         ValidationEnabled="true"        
+         CustomizeEditModel="@((e) => InvoiceLineGrid_CustomizeEditModel(e, Invoice))"
+         EditModelSaving="@((e) => InvoiceLineGrid_EditModelSaving(e, Invoice))"
+         DataItemDeleting="@((e) => InvoiceLineGrid_DataItemDeleting(e, Invoice))">
+            <Columns>
+        <DxGridCommandColumn Width="160px"></DxGridCommandColumn>"
+        <DxGridDataColumn FieldName="@nameof(InvoiceLineModel.Quantity)" Width="80" DisplayFormat="#0">
+            <EditSettings>
+                <DxSpinEditSettings DisplayFormat="#0"></DxSpinEditSettings>
+            </EditSettings>
+        </DxGridDataColumn>
+        <DxGridDataColumn FieldName="@nameof(InvoiceLineModel.TrackId)"></DxGridDataColumn>
+        <DxGridDataColumn FieldName="@nameof(InvoiceLineModel.UnitPrice)" Width="80"></DxGridDataColumn>
+        <DxGridDataColumn FieldName="@nameof(InvoiceLineModel.Total)" Width="120" ReadOnly="true" DataRowEditorVisible="false"></DxGridDataColumn>
+    </Columns>
+</DxGrid>
+
+@code {
+    IGrid itemsGrid { get; set; } = default!;
+    public IGrid ItemsGrid { get => itemsGrid; }
+
+    [Parameter] public InvoiceModel Invoice { get; set; } = default!;
+    [Parameter] public EventCallback<InvoiceModel> InvoiceChanged { get; set; }
+
+    [Parameter] public IInvoiceLineStore ItemStore { get; set; } = default!;
+
+    void InvoiceLineGrid_CustomizeEditModel(GridCustomizeEditModelEventArgs e, InvoiceModel invoice)
+    {
+        if (e.IsNew)
+        {
+            var newItem = (InvoiceLineModel)e.EditModel;
+            newItem.InvoiceId = invoice.InvoiceId;
+            newItem.Quantity = 1;
+        }
+    }
+
+    void InvoiceLineGrid_EditModelSaving(GridEditModelSavingEventArgs e, InvoiceModel invoice)
+    {
+        if (e.IsNew)
+            invoice.InvoiceLines.Add((InvoiceLineModel)e.EditModel);
+        else
+        {
+            var i = invoice.InvoiceLines.IndexOf((InvoiceLineModel)e.DataItem);
+            if (i >= 0)
+                invoice.InvoiceLines[i] = (InvoiceLineModel)e.EditModel;
+        }
+    }
+
+    void InvoiceLineGrid_DataItemDeleting(GridDataItemDeletingEventArgs e, InvoiceModel invoice)
+    {
+        invoice.InvoiceLines.Remove((InvoiceLineModel)e.DataItem);
+    }
+}

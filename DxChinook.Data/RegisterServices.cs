@@ -17,6 +17,10 @@ namespace DxChinook.Data
             services.AddScoped<IValidator<ArtistModel>, ArtistModelValidator>();
             services.AddScoped<IValidator<EmployeeModel>, EmployeeModelValidator>();
 
+            services.AddScoped<IValidator<InvoiceModel>, InvoiceModelValidator>();
+            services.AddScoped<IValidator<InvoiceLineModel>, InvoiceLineModelValidator>();
+            services.AddScoped<IValidator<TrackModel>, TrackModelValidator>();
+
             return services;
         }
     }

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using DxChinook.Data.Models;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 
@@ -45,5 +46,11 @@ namespace DxChinook.Data
 
     }
 
+
+    public interface IInvoiceLineStore : IDataStore<int, InvoiceLineModel>
+    {
+        Task<List<InvoiceLineModel>> GetByInvoiceIdAsync(int invoiceId);
+        Task Store(int invoiceId, params InvoiceLineModel[] items);
+    }
 
 }
