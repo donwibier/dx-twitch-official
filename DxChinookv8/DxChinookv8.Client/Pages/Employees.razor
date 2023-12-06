@@ -1,0 +1,20 @@
+﻿@page "/employees"
+@rendermode RenderMode.InteractiveAuto
+<BrowseAndEditCtrl TKey="int" TModel="EmployeeModel">
+    <GridColumns>
+        <DxGridDataColumn FieldName="@nameof(EmployeeModel.FirstName)" Caption="LastName" />
+        <DxGridDataColumn FieldName="@nameof(EmployeeModel.LastName)" Caption="LastName" />
+    </GridColumns>
+    <EditFormLayoutItems Context="ctx">
+        @{
+            var item = (EmployeeModel)ctx.EditModel;
+        }
+        <DxFormLayoutItem Caption="FirstName" ColSpanMd="6"><DxTextBox @bind-Text="item.FirstName" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="LastName" ColSpanMd="6"><DxTextBox @bind-Text="item.LastName" /></DxFormLayoutItem>
+
+    </EditFormLayoutItems>
+</BrowseAndEditCtrl>
+
+@code {
+
+}

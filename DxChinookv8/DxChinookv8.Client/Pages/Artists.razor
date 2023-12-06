@@ -1,0 +1,18 @@
+﻿@page "/artists"
+@rendermode RenderMode.InteractiveAuto
+<BrowseAndEditCtrl TKey="int" TModel="ArtistModel">
+    <GridColumns>
+        <DxGridDataColumn FieldName="@nameof(ArtistModel.Name)" Caption="Name" />
+    </GridColumns>
+    <EditFormLayoutItems Context="ctx">
+        @{
+            var item = (ArtistModel)ctx.EditModel;
+        }
+        <DxFormLayoutItem Caption="Artist" ColSpanMd="12"><DxTextBox @bind-Text="item.Name" /></DxFormLayoutItem>
+
+    </EditFormLayoutItems>
+</BrowseAndEditCtrl>
+
+@code {
+
+}

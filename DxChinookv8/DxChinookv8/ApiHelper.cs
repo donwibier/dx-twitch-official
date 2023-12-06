@@ -5,6 +5,7 @@ using DevExtreme.AspNet.Data;
 using Newtonsoft.Json;
 using DxChinook.Data.Models;
 using DxChinook.Data;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace DxChinookv8
@@ -26,7 +27,7 @@ namespace DxChinookv8
             where TKey: IEquatable<TKey>
             where TModel: class, new()
         {
-            app.MapGet($"api/{route}", async (MinimalDataSourceLoadOptions loadOptions, IDataStore<TKey, TModel> store) =>
+            app.MapGet($"api/{route}", async (MinimalDataSourceLoadOptions loadOptions, [FromServices] IDataStore<TKey, TModel> store) =>
             {
                 var s = store as IQueryableDataStore<TKey, TModel>;
                 if (s == null)
@@ -38,8 +39,8 @@ namespace DxChinookv8
                 return Results.Ok(await DataSourceLoader.LoadAsync(s.Query(), loadOptions));
             }).WithName($"Get{route}").WithOpenApi();
 
-
-            app.MapGet($"api/{route}/{{key}}", (TKey key, IDataStore<TKey, TModel> store) =>
+            //get by key
+            app.MapGet($"api/{route}/{{key}}", (TKey key, [FromServices] IDataStore<TKey, TModel> store) =>
                 store.GetByKey(key)
                     is TModel model
                         ? Results.Ok(model)
@@ -48,30 +49,30 @@ namespace DxChinookv8
 
             if (mapCreate)
             {
-                app.MapPost($"/api/{route}", async ([ValidateNever] TModel model, IDataStore<TKey, TModel> store) =>
+                app.MapPost($"/api/{route}", async ([ValidateNever, FromBody] TModel[] models, [FromServices] IDataStore<TKey, TModel> store) =>
                 {
-                    var result = await store.CreateAsync(model);
+                    var result = await store.CreateAsync(models);
                     return (result.Success)
-                        ? Results.Ok(store.ModelKey(model))
+                        ? Results.Ok(models)
                         : Results.BadRequest(JsonConvert.SerializeObject(result.Exception.Errors));
                 }).WithName($"Post{route}").WithOpenApi();
             }
 
             if (mapUpdate)
             {
-                app.MapPut($"/api/{route}/{{key}}", async (TKey key, [ValidateNever] TModel model, IDataStore<TKey, TModel> store) =>
+                app.MapPut($"/api/{route}", async ([ValidateNever, FromBody] TModel[] models, [FromServices] IDataStore<TKey, TModel> store) =>
                 {
-                    var result = await store.UpdateAsync(model);
+                    var result = await store.UpdateAsync(models);
 
                     return (result.Success)
-                        ? Results.Ok(store.ModelKey(model))
+                        ? Results.Ok(models)
                         : Results.BadRequest(JsonConvert.SerializeObject(result.Exception.Errors));
                 }).WithName($"Put{route}").WithOpenApi();
             }
 
             if (mapDelete)
             {
-                app.MapDelete($"/api/{route}/{{key}}", async (TKey key, IDataStore<TKey, TModel> store) =>
+                app.MapDelete($"/api/{route}/{{key}}", async (TKey key, [FromServices] IDataStore<TKey, TModel> store) =>
                 {
                     var result = await store.DeleteAsync(key);
                     if (!result.Success)

@@ -9,6 +9,9 @@ using DxChinookv8.Components;
 using DxChinook.Data.Models;
 using DxChinookv8;
 using DevExtreme.AspNet.Data;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Mvc;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,8 +60,22 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Counter).Assembly);
 
+app.MapStoreController<int, ArtistModel>("Artists");
 app.MapStoreController<int, CustomerModel>("Customers");
 app.MapStoreController<int, EmployeeModel>("Employees");
+app.MapStoreController<int, InvoiceModel>("Invoices");
+app.MapStoreController<int, InvoiceLineModel>("InvoiceLines");
+app.MapGet($"api/InvoiceLines/ByInvoice/{{invoiceId}}", async (int invoiceId, IInvoiceLineStore store) =>
+    await store.GetByInvoiceIdAsync(invoiceId)
+                    is List<InvoiceLineModel> result
+                        ? Results.Ok(result)
+                        : Results.NotFound()
+).WithName($"GetInvoiceItemsById").WithOpenApi();
 
+app.MapPut($"api/InvoiceLines/ByInvoice/{{invoiceId}}", 
+    async (int invoiceId, [FromBody] InvoiceLineModel[] invoiceLines, [FromServices] IInvoiceLineStore store) =>
+    {
+        await store.Store(invoiceId, invoiceLines);
+    }).WithName($"PutInvoiceItems").WithOpenApi();
 
 app.Run();

@@ -1,0 +1,54 @@
+﻿@page "/invoices"
+@using DevExtreme.AspNet.Data.ResponseModel;
+@using DevExtreme.AspNet.Data;
+
+@rendermode RenderMode.InteractiveAuto
+@inject IInvoiceLineStore lineStore
+
+@inject IDevExtremeLoader loader
+<h2>Clientside version</h2>
+<BrowseAndEditCtrl TKey="int" TModel="InvoiceModel" InitEditItemAction="@EditAction" OnSaved="@OnSaved" >
+    <GridColumns>
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.InvoiceDate)" Caption="InvoiceDate" />
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.BillingAddress)" Caption="BillingAddress" />
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.BillingCity)" Caption="BillingCity" />
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.BillingState)" Caption="BillingState" />
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.BillingCountry)" Caption="BillingCountry" />
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.BillingPostalCode)" Caption="BillingPostalCode" />
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.Total)" Caption="Total" DisplayFormat="c" />
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.CustomerId)" Caption="Customer" TextAlignment="GridTextAlignment.Left">
+            <CellDisplayTemplate>@context.GetRowValue(nameof(InvoiceModel.CustomerName))</CellDisplayTemplate>
+        </DxGridDataColumn>
+    </GridColumns>
+    <EditFormLayoutItems Context="ctx">
+        @{
+            var item = (InvoiceModel)ctx.EditModel;
+        }
+        <DxFormLayoutItem Caption="InvoiceDate" ColSpanMd="6"><DxDateEdit @bind-Date="item.InvoiceDate" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="BillingAddress" ColSpanMd="6"><DxTextBox @bind-Text="item.BillingAddress" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="BillingCity" ColSpanMd="6"><DxTextBox @bind-Text="item.BillingCity" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="BillingState" ColSpanMd="6"><DxTextBox @bind-Text="item.BillingState" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="BillingCountry" ColSpanMd="6"><DxTextBox @bind-Text="item.BillingCountry" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="BillingPostalCode" ColSpanMd="6"><DxTextBox @bind-Text="item.BillingPostalCode" /></DxFormLayoutItem>
+        <DxFormLayoutItem Caption="" ColSpanMd="12" BeginRow="true">
+            <InvoiceLinesCtrl @bind-Invoice="@item" ItemStore="@lineStore">
+
+            </InvoiceLinesCtrl>
+        </DxFormLayoutItem>
+    </EditFormLayoutItems>
+</BrowseAndEditCtrl>
+
+@code {
+
+    protected async void EditAction(InvoiceModel item)
+    {
+        var items = await lineStore.GetByInvoiceIdAsync(item.InvoiceId);
+        item.InvoiceLines = items;
+    }
+
+    async Task OnSaved(InvoiceModel item)
+    {
+        await lineStore.Store(item.InvoiceId, item.InvoiceLines.ToArray());
+    }
+
+}

@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{66E279
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NETv7", "NETv7", "{49A8470D-7AD7-4C7F-A907-19CF2C89FC9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DxChinookv8", "DxChinookv8\DxChinookv8\DxChinookv8.csproj", "{D7573CA1-DC5F-4138-9123-CAC983D1202E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxChinookv8", "DxChinookv8\DxChinookv8\DxChinookv8.csproj", "{D7573CA1-DC5F-4138-9123-CAC983D1202E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DxChinookv8.Client", "DxChinookv8\DxChinookv8.Client\DxChinookv8.Client.csproj", "{40436A68-C4A0-4F0C-BEB7-6A7D69090B5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DxChinookv8.Client", "DxChinookv8\DxChinookv8.Client\DxChinookv8.Client.csproj", "{40436A68-C4A0-4F0C-BEB7-6A7D69090B5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
