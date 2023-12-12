@@ -43,3 +43,7 @@ html, body {
     right: 0.75rem;
     top: 0.5rem;
 }
+
+.popup-editform-wide {
+    min-width: 1024px;
+}

@@ -28,6 +28,7 @@ builder.Services.AddDevExpressBlazor(options => {
     options.BootstrapVersion = DevExpress.Blazor.BootstrapVersion.v5;
     options.SizeMode = DevExpress.Blazor.SizeMode.Medium;
 });
+builder.Services.AddDevExpressServerSideBlazorReportViewer();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<IDevExtremeLoader, DevExtremeServerLoader>();
 builder.Services.RegisterDataServices(

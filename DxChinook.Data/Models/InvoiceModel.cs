@@ -20,8 +20,10 @@ namespace DxChinook.Data.Models
 
         public int CustomerId { get; set; }        
         public virtual string? CustomerName { get; set; }
+        public CustomerModel Customer { get; set; }
         public List<InvoiceLineModel> InvoiceLines { get; set; } = new List<InvoiceLineModel>();
     }
+
 
     public class InvoiceModelValidator : AbstractValidator<InvoiceModel>
     {
@@ -37,6 +39,7 @@ namespace DxChinook.Data.Models
         public int Quantity { get; set; }
         public decimal Total { get => Quantity * UnitPrice; }
         //public virtual TrackModel Track { get; set; } = default!;
+        public string TrackName { get; set; } = default!;
     }
 
     public class InvoiceLineModelValidator : AbstractValidator<InvoiceLineModel>

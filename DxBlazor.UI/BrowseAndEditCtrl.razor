@@ -5,6 +5,7 @@
 @inject IDevExtremeLoader Loader
 
 <DxGrid Data="@Data"
+        CssClass="@CssClass"
         CustomizeEditModel="Grid_CustomizeEditModel"
         EditModelSaving="Grid_EditModelSaving"
         DataItemDeleting="Grid_DataItemDeleting"
@@ -12,6 +13,7 @@
         ShowSearchBox="true"
         FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
         FilterCriteriaChanged="Grid_FilterChanged"
+        PopupEditFormCssClass="@PopupEditFormCssClass"
         KeyFieldName="@Store.KeyField">
     <Columns>
         <DxGridCommandColumn Width="160px" Visible="@ShowCommandColumn" EditButtonVisible="@AllowEdit" 
@@ -62,14 +64,18 @@
     [Parameter] public bool AllowEdit { get; set; } = true;
     [Parameter] public bool AllowDelete { get; set; } = true;
 
+    [Parameter] public string CssClass { get; set; } = default!;
+    [Parameter] public string EditFormCssClass { get; set; } = "w-100";
+    [Parameter] public string PopupEditFormCssClass { get; set; } = "w-100";
+    [Parameter] public Func<TModel, Task<bool>> OnSaving { get; set; } = default!;
+    [Parameter] public Func<TModel, Task> OnSaved { get; set; } = default!;
+
     public bool ShowCommandColumn { get => AllowInsert || AllowEdit || AllowDelete; }
 
     public IDataStore<TKey, TModel> GetStore() => Store;
 
     [Parameter] public Action<TModel> InitEditItemAction { get; set; } = default!;
-    //[Parameter] public Func<TModel, Task<bool>> OnSaving { get; set; } = default!;
-    [Parameter] public Func<TModel, Task> OnSaved { get; set; } = default!;
-
+    
     protected override void OnInitialized()
     {
         // var dataSource = new GridDevExtremeDataSource<TModel>(Store.Query());
@@ -104,6 +110,16 @@
     {
         serverError = null;
         var item = (TModel)e.EditModel;
+        if (OnSaving != null)
+        {
+            bool r = await OnSaving(item);
+            if (!r)
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
+
         var result = (e.IsNew)
             ? await Store.CreateAsync(item)
             : await Store.UpdateAsync(item);
