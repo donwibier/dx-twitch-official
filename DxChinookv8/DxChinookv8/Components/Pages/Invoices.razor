@@ -1,13 +1,18 @@
 ﻿@page "/invoices"
+@using DevExpress.Blazor.Reporting
+@using DevExpress.XtraReports.UI
 @using DevExtreme.AspNet.Data.ResponseModel;
 @using DevExtreme.AspNet.Data;
+@using DxChinook.Data.Reports
 
-@rendermode RenderMode.InteractiveAuto
+@rendermode RenderMode.InteractiveServer
 @inject IInvoiceLineStore lineStore
-
+@inject IDataStore<int, InvoiceModel> invoiceStore
+@inject IDataStore<int, CustomerModel> customerStore
 @inject IDevExtremeLoader loader
-<h2>Clientside version</h2>
-<BrowseAndEditCtrl TKey="int" TModel="InvoiceModel" InitEditItemAction="@EditAction" OnSaved="@OnSaved" >
+
+<BrowseAndEditCtrl TKey="int" TModel="InvoiceModel" InitEditItemAction="@EditAction" OnSaved="@OnSaved"
+                   PopupEditFormCssClass="popup-editform-wide">
     <GridColumns>
         <DxGridDataColumn FieldName="@nameof(InvoiceModel.InvoiceDate)" Caption="InvoiceDate" />
         <DxGridDataColumn FieldName="@nameof(InvoiceModel.BillingAddress)" Caption="BillingAddress" />
@@ -18,6 +23,11 @@
         <DxGridDataColumn FieldName="@nameof(InvoiceModel.Total)" Caption="Total" DisplayFormat="c" />
         <DxGridDataColumn FieldName="@nameof(InvoiceModel.CustomerId)" Caption="Customer" TextAlignment="GridTextAlignment.Left">
             <CellDisplayTemplate>@context.GetRowValue(nameof(InvoiceModel.CustomerName))</CellDisplayTemplate>
+        </DxGridDataColumn>
+        <DxGridDataColumn FieldName="@nameof(InvoiceModel.InvoiceId)" Caption="" >
+            <CellDisplayTemplate>
+                <DxButton Text="PDF" Click="@(async (e) =>await PreviewReport((int)context.Value))" SubmitFormOnClick="false"></DxButton>
+            </CellDisplayTemplate>
         </DxGridDataColumn>
     </GridColumns>
     <EditFormLayoutItems Context="ctx">
@@ -38,7 +48,17 @@
     </EditFormLayoutItems>
 </BrowseAndEditCtrl>
 
+<DxPopup HeaderText="Invoice" Width="1200px" Height="900px" Scrollable="true"
+    @bind-Visible="@PopupVisible" Shown="PopupShown">
+    <DevExpress.Blazor.Reporting.DxReportViewer RootCssClasses="w-100 h-100" @ref="Viewer" SinglePagePreview="true">
+
+    </DevExpress.Blazor.Reporting.DxReportViewer>
+</DxPopup>
+
 @code {
+    bool PopupVisible{ get; set; }
+    DxReportViewer Viewer { get; set; }
+    XtraReport Report { get; set; }
 
     protected async void EditAction(InvoiceModel item)
     {
@@ -51,4 +71,27 @@
         await lineStore.Store(item.InvoiceId, item.InvoiceLines.ToArray());
     }
 
+    async Task PreviewReport(int invoiceId)
+    {
+        try
+        {
+            var model = invoiceStore.GetByKey(invoiceId);
+            EditAction(model);
+            model.Customer = customerStore.GetByKey(model.CustomerId);
+
+            var report = new InvoiceReport();
+            report.DataSource = new List<InvoiceModel>(new[] { model });
+            report.ApplyLocalization("en-US");
+
+            Report = report;
+            PopupVisible = true;
+        }
+        catch { }
+    }
+
+    async Task PopupShown(PopupShownEventArgs args)
+    {
+        // initialize the reportviewer
+        await Viewer.OpenReportAsync(Report);
+    }
 }

@@ -15,7 +15,9 @@
                 <DxSpinEditSettings DisplayFormat="#0"></DxSpinEditSettings>
             </EditSettings>
         </DxGridDataColumn>
-        <DxGridDataColumn FieldName="@nameof(InvoiceLineModel.TrackId)"></DxGridDataColumn>
+        <DxGridDataColumn FieldName="@nameof(InvoiceLineModel.TrackId)" TextAlignment="GridTextAlignment.Left">
+            <CellDisplayTemplate>@context.GetRowValue(nameof(InvoiceLineModel.TrackName))</CellDisplayTemplate>
+        </DxGridDataColumn>
         <DxGridDataColumn FieldName="@nameof(InvoiceLineModel.UnitPrice)" Width="80"></DxGridDataColumn>
         <DxGridDataColumn FieldName="@nameof(InvoiceLineModel.Total)" Width="120" ReadOnly="true" DataRowEditorVisible="false"></DxGridDataColumn>
     </Columns>

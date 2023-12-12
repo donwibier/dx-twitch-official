@@ -6,6 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DevExpress.Blazor" Version="23.2.2-beta" />
+    <PackageReference Include="DevExpress.Blazor.Reporting.Viewer" Version="23.2.2-beta" />
+    <PackageReference Include="DevExpress.Reporting.Core" Version="23.2.2-beta" />
 	  <PackageReference Include="DevExtreme.AspNet.Core" Version="23.2.2-beta" />
 	  <PackageReference Include="DevExtreme.AspNet.Data" Version="3.0.0" />
 

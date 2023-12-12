@@ -56,8 +56,11 @@ namespace DxChinook.Data.EF
                 .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.CustomerId != 0 ? $"{src.Customer.LastName}, {src.Customer.FirstName}" : ""))
                 .ReverseMap()
                     .ForMember(dest => dest.InvoiceLines, opt => opt.Ignore());
+            
+            
 
             CreateMap<InvoiceLine, InvoiceLineModel>()
+                .ForMember(dest => dest.TrackName, opt => opt.MapFrom(src => $"{src.Track.Name} / {src.Track.Album.Title} / {src.Track.Album.Artist.Name}"))
                 .ReverseMap()
                     .ForMember(dest => dest.Track, opt => opt.Ignore())
                 ;
